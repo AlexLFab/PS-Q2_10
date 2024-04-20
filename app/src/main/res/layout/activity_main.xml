@@ -67,4 +67,13 @@
         android:backgroundTint="@color/normal_yellow"
         android:contentDescription="Botón amarillo" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bluetoothButton"
+        android:layout_below="@+id/yellowButton"
+        android:layout_marginTop="200dp"
+        android:text="Buscar Oponentes"
+        />
+
 </RelativeLayout>

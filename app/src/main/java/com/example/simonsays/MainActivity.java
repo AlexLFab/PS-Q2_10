@@ -1,6 +1,14 @@
 package com.example.simonsays;
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +16,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.circularreveal.CircularRevealHelper;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,12 +31,15 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> sequence = new ArrayList<>();
     private ArrayList<Integer> playerInput = new ArrayList<>();
     private TextView scoreTextView;
-    private Button greenButton, redButton, blueButton, yellowButton;
+    private Button greenButton, redButton, blueButton, yellowButton, bluetoothButton;
     private int score = 0;
     private int currentIndex = 0;
 
     private int sequenceLength = 5;
+    private static final int REQUEST_ENABLE_BT = 1;
 
+
+    @SuppressLint({"MissingInflatedId", "MissingPermission"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         redButton = findViewById(R.id.redButton);
         blueButton = findViewById(R.id.blueButton);
         yellowButton = findViewById(R.id.yellowButton);
+        bluetoothButton = findViewById(R.id.bluetoothButton);
+
+        BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
+        BluetoothAdapter mBtAdapter = bluetoothManager.getAdapter();
 
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +80,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onColorButtonClicked(3);
+            }
+        });
+
+        bluetoothButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBtAdapter == null) {
+                    Toast.makeText(MainActivity.super.getApplicationContext(), "No soporta Bluetooth", Toast.LENGTH_SHORT).show();
+                }
+                if (!mBtAdapter.isEnabled()) {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+                }
             }
         });
 
@@ -224,7 +257,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                @SuppressLint("MissingPermission") String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+            }
+        }
+    };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-
+        // Don't forget to unregister the ACTION_FOUND receiver.
+        unregisterReceiver(receiver);
+    }
 }
