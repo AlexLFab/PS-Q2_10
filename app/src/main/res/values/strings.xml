@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Simon Says</string>
+    <string name="score_label">Score: %d</string>
+</resources>
