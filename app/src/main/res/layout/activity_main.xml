@@ -72,8 +72,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/bluetoothButton"
         android:layout_below="@+id/yellowButton"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="50dp"
         android:text="Buscar Oponentes"
         />
+    <ListView
+        android:id="@+id/devicesList"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/bluetoothButton"/>
 
 </RelativeLayout>

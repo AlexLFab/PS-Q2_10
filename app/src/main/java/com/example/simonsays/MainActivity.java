@@ -14,8 +14,10 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
+    private ArrayAdapter<String> listAdapter;
+    private ListView devicesList;
 
 
     @SuppressLint({"MissingInflatedId", "MissingPermission"})
@@ -59,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
         blueButton = findViewById(R.id.blueButton);
         yellowButton = findViewById(R.id.yellowButton);
         bluetoothButton = findViewById(R.id.bluetoothButton);
+
+        devicesList = findViewById(R.id.devicesList);
+        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        devicesList.setAdapter(listAdapter);
+
+        registerReceiver(receiverDevices, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        registerReceiver(receiverDevices, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+        registerReceiver(receiverDevices, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
 
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (!mBtAdapter.isDiscovering()){
+        if (!mBtAdapter.isDiscovering()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             startActivityForResult(intent, REQUEST_DISCOVER_BT);
         }
@@ -105,11 +117,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mBtAdapter == null) {
                     Toast.makeText(MainActivity.super.getApplicationContext(), "No soporta Bluetooth", Toast.LENGTH_SHORT).show();
-                }else{
-                    Set<BluetoothDevice> devices = mBtAdapter.getBondedDevices();
-                    for (BluetoothDevice device: devices){
-                        Log.d("Device", device.getName() + "," + device.getAddress());
+                } else {
+                    if (!mBtAdapter.isEnabled()) {
+                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
                     }
+
+
+                    listAdapter.clear();
+                    Set<BluetoothDevice> devices = mBtAdapter.getBondedDevices();
+                    for (BluetoothDevice device : devices) {
+                        Log.d("Device", device.getName() + "," + device.getAddress());
+                        listAdapter.add(device.getName());
+                        listAdapter.notifyDataSetChanged();
+                    }
+
+                    mBtAdapter.startDiscovery();
+
                 }
 
             }
@@ -274,17 +299,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     private final BroadcastReceiver receiverDevices = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                @SuppressLint("MissingPermission") String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress();// MAC address
-                Log.d("DispositivoN", deviceName);
-                Log.d("DispositivoM", deviceHardwareAddress);
+                if (ActivityCompat.checkSelfPermission(MainActivity.super.getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
+                    return;
+                }
+                listAdapter.add(device.getName() + device.getAddress());
+                listAdapter.notifyDataSetChanged();
+
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+                Toast.makeText(MainActivity.super.getApplicationContext(), "Escaneando", Toast.LENGTH_SHORT).show();
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                Toast.makeText(MainActivity.super.getApplicationContext(), "Escaneo Terminado", Toast.LENGTH_SHORT).show();
             }
         }
     };
