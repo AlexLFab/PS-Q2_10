@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
         yellowButton = findViewById(R.id.yellowButton);
         bluetoothButton = findViewById(R.id.bluetoothButton);
 
-        BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
-        BluetoothAdapter mBtAdapter = bluetoothManager.getAdapter();
+        BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mBtAdapter == null) {
+                    Log.d("BTAdapter", "Es null");
                     Toast.makeText(MainActivity.super.getApplicationContext(), "No soporta Bluetooth", Toast.LENGTH_SHORT).show();
                 }
                 if (!mBtAdapter.isEnabled()) {
