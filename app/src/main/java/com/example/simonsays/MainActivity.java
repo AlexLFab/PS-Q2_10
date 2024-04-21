@@ -1,5 +1,6 @@
 package com.example.simonsays;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,10 +14,13 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,6 +29,7 @@ import com.google.android.material.circularreveal.CircularRevealHelper;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private int currentIndex = 0;
 
     private int sequenceLength = 5;
-    private static final int REQUEST_ENABLE_BT = 1;
+
+    BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+    private static final int REQUEST_ENABLE_BT = 0;
+    private static final int REQUEST_DISCOVER_BT = 1;
 
 
     @SuppressLint({"MissingInflatedId", "MissingPermission"})
@@ -51,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         blueButton = findViewById(R.id.blueButton);
         yellowButton = findViewById(R.id.yellowButton);
         bluetoothButton = findViewById(R.id.bluetoothButton);
-
-        BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,18 +88,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (!mBtAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+        }
+
+        if (!mBtAdapter.isDiscovering()){
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            startActivityForResult(intent, REQUEST_DISCOVER_BT);
+        }
+
+
         bluetoothButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBtAdapter == null) {
-                    Log.d("BTAdapter", "Es null");
                     Toast.makeText(MainActivity.super.getApplicationContext(), "No soporta Bluetooth", Toast.LENGTH_SHORT).show();
+                }else{
+                    Set<BluetoothDevice> devices = mBtAdapter.getBondedDevices();
+                    for (BluetoothDevice device: devices){
+                        Log.d("Device", device.getName() + "," + device.getAddress());
+                    }
                 }
-                if (!mBtAdapter.isEnabled()) {
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 
-                }
             }
         });
 
@@ -140,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Secuencia de colores: ", String.valueOf(next));
         }
     }
+
     private void showSequence() {
         disableColorButtons(); // Desactivar los botones durante la reproducción de la secuencia
 
@@ -182,15 +201,15 @@ public class MainActivity extends AppCompatActivity {
                 greenButton.setBackgroundColor(highlightColor);
                 break;
             case 1:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.white);
                 redButton.setBackgroundColor(highlightColor);
                 break;
             case 2:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.white);
                 blueButton.setBackgroundColor(highlightColor);
                 break;
             case 3:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.white);
                 yellowButton.setBackgroundColor(highlightColor);
                 break;
         }
@@ -246,8 +265,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void enableColorButtons() {
         greenButton.setEnabled(true);
         redButton.setEnabled(true);
@@ -256,8 +273,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverDevices = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
@@ -265,16 +281,33 @@ public class MainActivity extends AppCompatActivity {
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 @SuppressLint("MissingPermission") String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
+                String deviceHardwareAddress = device.getAddress();// MAC address
+                Log.d("DispositivoN", deviceName);
+                Log.d("DispositivoM", deviceHardwareAddress);
+
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode){
+            case REQUEST_ENABLE_BT:
+                if (resultCode==RESULT_OK){
+                    Log.d("BT", "Bluetooth on");
+                }else {
+                    Log.d("BT", "Bluetooth rejected");
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         // Don't forget to unregister the ACTION_FOUND receiver.
-        unregisterReceiver(receiver);
+        unregisterReceiver(receiverDevices);
     }
 }
