@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void showSequence() {
-        disableColorButtons(); // Desactivar los botones durante la reproducción de la secuencia
-
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -128,36 +126,28 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }, i * 2000); // Resalta cada botón con un retraso de 2 segundos
                 }
-
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        enableColorButtons(); // Activar los botones después de mostrar la secuencia
-                    }
-                }, sequence.size() * 2000 + 500); // Activar los botones después de que la secuencia haya terminado
             }
         }, 500);
     }
-
 
     private void highlightButton(int colorIndex) {
         int highlightColor;
         switch (colorIndex) {
             case 0:
                 Log.d("Hola", "Estoy pasando por aqui");
-                highlightColor = ContextCompat.getColor(this, R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.highlight_green);
                 greenButton.setBackgroundColor(highlightColor);
                 break;
             case 1:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.highlight_red);
                 redButton.setBackgroundColor(highlightColor);
                 break;
             case 2:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.highlight_blue);
                 blueButton.setBackgroundColor(highlightColor);
                 break;
             case 3:
-                highlightColor = ContextCompat.getColor(this,  R.color.white);
+                highlightColor = ContextCompat.getColor(this, R.color.highlight_yellow);
                 yellowButton.setBackgroundColor(highlightColor);
                 break;
         }
@@ -203,28 +193,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    private void disableColorButtons() {
-        greenButton.setEnabled(false);
-        redButton.setEnabled(false);
-        blueButton.setEnabled(false);
-        yellowButton.setEnabled(false);
-    }
-
-
-
-
-    private void enableColorButtons() {
-        greenButton.setEnabled(true);
-        redButton.setEnabled(true);
-        blueButton.setEnabled(true);
-        yellowButton.setEnabled(true);
-    }
-
-
-
-
-
-
 }
