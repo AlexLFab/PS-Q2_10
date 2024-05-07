@@ -22,14 +22,15 @@ public class MainActivity extends AppCompatActivity {
     private Button greenButton, redButton, blueButton, yellowButton;
     private int score = 0;
     private int currentIndex = 0;
-
     private int sequenceLength = 5;
+
+    private boolean player_turn = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         scoreTextView = findViewById(R.id.scoreTextView);
         greenButton = findViewById(R.id.greenButton);
         redButton = findViewById(R.id.redButton);
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 onColorButtonClicked(3);
             }
         });
-
+        disableButtons();
         final TextView countdownTextView = findViewById(R.id.countdownTextView);
         countdownTextView.setText("3");
 
@@ -73,29 +74,52 @@ public class MainActivity extends AppCompatActivity {
     private void startCountdown() {
         final TextView countdownTextView = findViewById(R.id.countdownTextView);
         countdownTextView.setText("3");
+        if (!player_turn) {
+            // Inicia una cuenta regresiva antes de comenzar la secuencia
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    countdownTextView.setText("2");
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countdownTextView.setText("1");
+                            new android.os.Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    countdownTextView.setText("Pay Attention!");
+                                    // Inicia la secuencia después de mostrar "¡Ya!"
+                                    generateSequence();
+                                    showSequence();
+                                }
+                            }, 1000); // Espera 1 segundo antes de mostrar "¡Ya!"
+                        }
+                    }, 1000); // Espera 1 segundo antes de mostrar "1"
+                }
+            }, 1000); // Espera 1 segundo antes de mostrar "2"
+        }else{
+            // Inicia una cuenta regresiva antes de comenzar la secuencia
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    countdownTextView.setText("2");
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countdownTextView.setText("1");
+                            new android.os.Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    countdownTextView.setText("Your Turn!");
+                                    // Inicia la secuencia después de mostrar "¡Ya!"
+                                }
+                            }, 1000); // Espera 1 segundo antes de mostrar "¡Ya!"
+                        }
+                    }, 1000); // Espera 1 segundo antes de mostrar "1"
+                }
+            }, 1000); // Espera 1 segundo antes de mostrar "2"
 
-        // Inicia una cuenta regresiva antes de comenzar la secuencia
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                countdownTextView.setText("2");
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        countdownTextView.setText("1");
-                        new android.os.Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                countdownTextView.setText("¡Ya!");
-                                // Inicia la secuencia después de mostrar "¡Ya!"
-                                generateSequence();
-                                showSequence();
-                            }
-                        }, 1000); // Espera 1 segundo antes de mostrar "¡Ya!"
-                    }
-                }, 1000); // Espera 1 segundo antes de mostrar "1"
-            }
-        }, 1000); // Espera 1 segundo antes de mostrar "2"
+        }
     }
 
     private void generateSequence() {
@@ -107,12 +131,30 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Secuencia de colores: ", String.valueOf(next));
         }
     }
+
+    private void disableButtons() {
+        greenButton.setEnabled(false);
+        redButton.setEnabled(false);
+        blueButton.setEnabled(false);
+        yellowButton.setEnabled(false);
+    }
+
+    private void enableButtons() {
+        greenButton.setEnabled(true);
+        redButton.setEnabled(true);
+        blueButton.setEnabled(true);
+        yellowButton.setEnabled(true);
+        player_turn=false;
+    }
     private void showSequence() {
+        disableButtons(); // Desactivar los botones al inicio de la secuencia
+
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < sequence.size(); i++) {
                     final int colorIndex = sequence.get(i);
+                    final int finalI = i; // Variable final local
                     new android.os.Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -123,8 +165,13 @@ public class MainActivity extends AppCompatActivity {
                                     unhighlightButtons();
                                 }
                             }, 1500); // Des-resalta el botón después de 1.5 segundos
+                            if (finalI == sequence.size() - 1) {
+                                player_turn=true;
+                                startCountdown();
+                                enableButtons(); // Activar los botones al final de la secuencia
+                            }
                         }
-                    }, i * 2000); // Resalta cada botón con un retraso de 2 segundos
+                    }, finalI * 2000); // Resalta cada botón con un retraso de 2 segundos
                 }
             }
         }, 500);
@@ -166,31 +213,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onColorButtonClicked(int colorIndex) {
-        playerInput.add(colorIndex);
-        if (playerInput.get(currentIndex) == sequence.get(currentIndex)) {
-            currentIndex++;
-            if (currentIndex == sequence.size()) {
+            playerInput.add(colorIndex);
+            if (playerInput.get(currentIndex) == sequence.get(currentIndex)) {
+                currentIndex++;
+                if (currentIndex == sequence.size()) {
+                    currentIndex = 0;
+                    playerInput.clear();
+                    score++;
+                    scoreTextView.setText(getString(R.string.score_label, score));
+                    generateSequence();
+                    startCountdown();
+                    if (score % 5 == 0) { // Aumentar la longitud de la secuencia cada 5 aciertos
+                        sequenceLength++;
+                    }
+                }
+            } else {
+                Toast.makeText(this, "¡Error! Inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
                 currentIndex = 0;
                 playerInput.clear();
-                score++;
+                score = 0;
                 scoreTextView.setText(getString(R.string.score_label, score));
                 generateSequence();
                 startCountdown();
-                if (score % 5 == 0) { // Aumentar la longitud de la secuencia cada 5 aciertos
-                    sequenceLength++;
+                if (sequenceLength > 5) { // Reducir la longitud de la secuencia si ya es mayor que 5
+                    sequenceLength--;
                 }
             }
-        } else {
-            Toast.makeText(this, "¡Error! Inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
-            currentIndex = 0;
-            playerInput.clear();
-            score = 0;
-            scoreTextView.setText(getString(R.string.score_label, score));
-            generateSequence();
-            startCountdown();
-            if (sequenceLength > 5) { // Reducir la longitud de la secuencia si ya es mayor que 5
-                sequenceLength--;
-            }
-        }
+
     }
+
 }
