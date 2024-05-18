@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.simonsays.Piano.PianoActivity;
+
 public class StartActivity extends AppCompatActivity {
 
     @Override
@@ -51,6 +53,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void tutorialGame() {
-
+        Intent intent = new Intent(StartActivity.this, PianoActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

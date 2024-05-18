@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Simon Says</string>
     <string name="score_label">Score: %d</string>
+    <string name="iniciar_juego">Iniciar Juego</string>
+    <string name="play">Play</string>
+    <string name="time_15">TIME: 15</string>
+    <string name="score_0">SCORE: 0</string>
+    <string name="best_0">BEST: 0</string>
+    <string name="score">SCORE:</string>
+    <string name="beat">BEAT:</string>
+    <string name="time">TIME:</string>
+    <string name="best">"BEST: "</string>
+    <string name="bot_n_amarillo">Botón amarillo</string>
+    <string name="bot_n_azul">Botón azul</string>
+    <string name="bot_n_rojo">Botón rojo</string>
+    <string name="bot_n_verde">Botón verde</string>
+    <string name="ya">¡Ya!</string>
 </resources>

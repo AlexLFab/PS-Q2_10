@@ -12,7 +12,8 @@
         android:layout_marginTop="16dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        android:text="Score: 0"
+        android:text="@string/score_0"
+        android:textStyle="bold"
         android:textSize="24sp" />
 
     <TextView
@@ -21,8 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/scoreTextView"
         android:layout_centerHorizontal="true"
-        android:text="¡Ya!"
+        android:text="@string/ya"
         android:textSize="24sp" />
+
 
     <Button
         android:id="@+id/greenButton"
@@ -32,7 +34,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="74dp"
         android:backgroundTint="@color/normal_green"
-        android:contentDescription="Botón verde"
+        android:contentDescription="@string/bot_n_verde"
         app:iconTint="#008BC34A" />
 
     <Button
@@ -44,7 +46,7 @@
         android:layout_marginTop="78dp"
         android:layout_toEndOf="@id/greenButton"
         android:backgroundTint="@color/normal_red"
-        android:contentDescription="Botón rojo"
+        android:contentDescription="@string/bot_n_rojo"
         android:translationX="-4dp" />
 
     <Button
@@ -56,7 +58,7 @@
         android:layout_marginTop="254dp"
         android:layout_toEndOf="@id/redButton"
         android:backgroundTint="@color/normal_blue"
-        android:contentDescription="Botón azul"
+        android:contentDescription="@string/bot_n_azul"
         android:translationX="-1dp"
         android:translationY="-1dp" />
 
@@ -69,7 +71,7 @@
         android:layout_marginTop="253dp"
         android:layout_toEndOf="@id/blueButton"
         android:backgroundTint="@color/normal_yellow"
-        android:contentDescription="Botón amarillo"
+        android:contentDescription="@string/bot_n_amarillo"
         android:translationX="-4dp" />
 
 </RelativeLayout>
