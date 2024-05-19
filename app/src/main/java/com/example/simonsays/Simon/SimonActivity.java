@@ -4,10 +4,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.example.simonsays.R;
@@ -47,6 +51,8 @@ public class SimonActivity extends AppCompatActivity {
         countdownTextView = findViewById(R.id.countdownTextView);
         tv_score = findViewById(R.id.tv_score);
         tv_beat = findViewById(R.id.tv_beat);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set initial values
         SharedPreferences preferences = getSharedPreferences("PREF", 0);
@@ -214,5 +220,15 @@ public class SimonActivity extends AppCompatActivity {
                 sequenceLength--;
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

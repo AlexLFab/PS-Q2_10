@@ -46,7 +46,6 @@ public class StartActivity extends AppCompatActivity {
     private void startGame() {
         Intent intent = new Intent(StartActivity.this, SimonActivity.class);
         startActivity(intent);
-        finish(); // Finaliza la actividad de inicio para que no pueda volver atrás
     }
 
     private void menuGame() {
@@ -56,6 +55,5 @@ public class StartActivity extends AppCompatActivity {
     private void tutorialGame() {
         Intent intent = new Intent(StartActivity.this, PianoActivity.class);
         startActivity(intent);
-        finish();
     }
 }

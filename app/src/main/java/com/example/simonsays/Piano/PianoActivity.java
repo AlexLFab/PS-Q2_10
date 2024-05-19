@@ -1,10 +1,13 @@
 package com.example.simonsays.Piano;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +45,9 @@ public class PianoActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", 0);
         beatScore = preferences.getInt("highscore", 0);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         iv_11 = (ImageView) findViewById(R.id.iv_11);
         iv_12 = (ImageView) findViewById(R.id.iv_12);
@@ -343,5 +349,15 @@ public class PianoActivity extends AppCompatActivity {
         pawInFrameImage = R.drawable.ic_paw_frame;
         tapImage = R.drawable.ic_tap;
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
