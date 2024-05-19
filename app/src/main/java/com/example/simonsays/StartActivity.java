@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class StartActivity extends AppCompatActivity {
 
+    Boolean isLogged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +18,8 @@ public class StartActivity extends AppCompatActivity {
 
         Button startButton = findViewById(R.id.startButton);
         Button menuButton = findViewById(R.id.menuButton);
-        Button tutorialButton = findViewById(R.id.tutorialButton);
+        Button logInButton = findViewById(R.id.logInButton);
+        Button leaderboardsButton = findViewById(R.id.leaderboards);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,11 +35,13 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        tutorialButton.setOnClickListener(new View.OnClickListener() {
+        logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tutorialGame();
+                logIn();
             }
+
+
         });
     }
 
@@ -50,7 +55,9 @@ public class StartActivity extends AppCompatActivity {
 
     }
 
-    private void tutorialGame() {
-
+    private void logIn() {
+        Intent intent = new Intent(StartActivity.this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }

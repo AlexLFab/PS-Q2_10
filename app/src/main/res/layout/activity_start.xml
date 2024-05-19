@@ -11,8 +11,6 @@
         android:layout_width="328dp"
         android:layout_height="328dp"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:src="@drawable/img_logo"
         android:translationY="-50dp" />
 
@@ -23,7 +21,9 @@
         android:layout_below="@id/logoImageView"
         android:layout_centerHorizontal="true"
         android:onClick="startGame"
-        android:text="Start Game" />
+        android:text="Start Game"
+
+        />
 
     <Button
         android:id="@+id/menuButton"
@@ -35,13 +35,22 @@
         android:text="Settings" />
 
     <Button
-        android:id="@+id/tutorialButton"
+        android:id="@+id/logInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/menuButton"
         android:layout_centerHorizontal="true"
-        android:onClick="tutorialGame"
-        android:text="Tutorial" />
+        android:onClick="logIn"
+        android:text="Log In" />
+
+    <Button
+        android:id="@+id/leaderboards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logInButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="leaderboards"
+        android:text="LeaderBoards" />
 
     <TextView
         android:id="@+id/textView"
