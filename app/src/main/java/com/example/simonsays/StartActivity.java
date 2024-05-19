@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.simonsays.ModeSelector.ModeSelectorActivity;
 import com.example.simonsays.Piano.PianoActivity;
 import com.example.simonsays.Simon.SimonActivity;
 
@@ -44,16 +45,15 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        Intent intent = new Intent(StartActivity.this, SimonActivity.class);
+        Intent intent = new Intent(StartActivity.this, ModeSelectorActivity.class);
         startActivity(intent);
     }
 
     private void menuGame() {
-
+        //TODO
     }
 
     private void tutorialGame() {
-        Intent intent = new Intent(StartActivity.this, PianoActivity.class);
-        startActivity(intent);
+        //TODO
     }
 }

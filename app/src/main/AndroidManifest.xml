@@ -18,6 +18,8 @@
         <activity
             android:name=".Piano.PianoActivity"
             android:exported="false" />
+        <activity android:name=".ModeSelector.ModeSelectorActivity"
+            android:exported="false"/>
         <activity
             android:name=".StartActivity"
             android:exported="true">
