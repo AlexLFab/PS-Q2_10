@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.simonsays.Piano.PianoActivity;
+import com.example.simonsays.Simon.SimonActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -43,7 +44,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+        Intent intent = new Intent(StartActivity.this, SimonActivity.class);
         startActivity(intent);
         finish(); // Finaliza la actividad de inicio para que no pueda volver atrás
     }

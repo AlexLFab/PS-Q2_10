@@ -6,11 +6,11 @@
     android:padding="5dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Piano.PianoActivity">
+    tools:context=".Simon.SimonActivity">
 
     <include
         android:id="@+id/include1"
-        layout="@layout/top_bar"
+        layout="@layout/top_bar_simon"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
