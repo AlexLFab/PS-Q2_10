@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/countdownTextView"
+
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ya"
+        android:textSize="24sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
+    <Button
+        android:id="@+id/greenButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="74dp"
+        android:backgroundTint="@color/normal_green"
+        android:contentDescription="@string/bot_n_verde"
+        app:iconTint="#008BC34A" />
+
+    <Button
+        android:id="@+id/redButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="78dp"
+        android:backgroundTint="@color/normal_red"
+        android:contentDescription="@string/bot_n_rojo"
+        android:translationX="-4dp" />
+
+    <Button
+        android:id="@+id/blueButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="-340dp"
+        android:layout_marginTop="254dp"
+        android:backgroundTint="@color/normal_blue"
+        android:contentDescription="@string/bot_n_azul"
+        android:translationX="-1dp"
+        android:translationY="-1dp" />
+
+    <Button
+        android:id="@+id/yellowButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="253dp"
+        android:backgroundTint="@color/normal_yellow"
+        android:contentDescription="@string/bot_n_amarillo"
+        android:translationX="-4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
