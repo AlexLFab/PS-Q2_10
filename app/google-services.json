@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "13232204215",
+    "firebase_url": "https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ps-q2-10",
+    "storage_bucket": "ps-q2-10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13232204215:android:d09b90313a4456acc9e032",
+        "android_client_info": {
+          "package_name": "udc.psi.simonsays"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl2TKXJFywRHkfTOnbkfv-zT3yZHwo_8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

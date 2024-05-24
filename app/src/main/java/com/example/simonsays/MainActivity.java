@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private int sequenceLength = 5;
 
     private boolean player_turn = false;
+
 
 
     @Override
