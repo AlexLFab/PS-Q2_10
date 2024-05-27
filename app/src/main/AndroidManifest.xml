@@ -25,6 +25,9 @@
             android:name=".Simon.SimonActivity"
             android:exported="false" />
         <activity
+            android:name=".Simon.SimonMultiplayer"
+            android:exported="false" />
+        <activity
             android:name=".Piano.PianoActivity"
             android:exported="false" />
         <activity android:name=".ModeSelector.ModeSelectorActivity"

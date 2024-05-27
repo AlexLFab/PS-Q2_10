@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.simonsays.Piano.PianoActivity;
 import com.example.simonsays.R;
 import com.example.simonsays.Simon.SimonActivity;
+import com.example.simonsays.Simon.SimonMultiplayer;
 import com.example.simonsays.StartActivity;
 
 public class ModeSelectorActivity extends AppCompatActivity {
@@ -56,9 +57,8 @@ public class ModeSelectorActivity extends AppCompatActivity {
     }
 
     private void multiPlayer() {
-        //TODO
-        //Intent intent = new Intent(ModeSelectorActivity.this, SimonMultiPlayerActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(ModeSelectorActivity.this, SimonMultiplayer.class);
+        startActivity(intent);
     }
 
     private void reflexTest() {

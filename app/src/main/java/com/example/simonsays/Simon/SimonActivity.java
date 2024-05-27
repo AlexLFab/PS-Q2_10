@@ -149,7 +149,7 @@ public class SimonActivity extends AppCompatActivity {
         for (int i = 0; i < sequenceLength; i++) {
             int next = random.nextInt(4);
             sequence.add(next); // 0: green, 1: red, 2: blue, 3: yellow
-            Log.d("Color Sequence: ", String.valueOf(next));
+            Log.d("Color Sequence: ", String.valueOf(sequence));
         }
     }
 
