@@ -5,27 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/recordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="Record"
-        android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/scoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="Score: 0"
-        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/countdownTextView"
@@ -45,7 +25,7 @@
         android:id="@+id/greenButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/scoreTextView"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="32dp"
         android:layout_marginTop="74dp"
         android:backgroundTint="@color/normal_green"
@@ -56,7 +36,7 @@
         android:id="@+id/redButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/scoreTextView"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="140dp"
         android:layout_marginTop="78dp"
         android:layout_toEndOf="@id/greenButton"
@@ -68,7 +48,7 @@
         android:id="@+id/blueButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/scoreTextView"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="-340dp"
         android:layout_marginTop="254dp"
         android:layout_toEndOf="@id/redButton"
@@ -81,7 +61,7 @@
         android:id="@+id/yellowButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/scoreTextView"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="140dp"
         android:layout_marginTop="253dp"
         android:layout_toEndOf="@id/blueButton"
