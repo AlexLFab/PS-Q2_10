@@ -1,9 +1,11 @@
 package com.example.simonsays;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,8 @@ public class Leaderboards extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboards);
         textView = findViewById(R.id.templeaderboard);
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Ordenar por el campo "record"
         mDatabase.orderByChild("record").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -55,5 +59,15 @@ public class Leaderboards extends AppCompatActivity {
                 Toast.makeText(Leaderboards.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

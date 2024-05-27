@@ -119,7 +119,6 @@ public class StartActivity extends AppCompatActivity {
     private void logIn() {
         Intent intent = new Intent(StartActivity.this, Login.class);
         startActivity(intent);
-        finish();
     }
 
     public boolean isNetworkAvailable() {
