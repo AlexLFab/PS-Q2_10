@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,13 +29,18 @@
 
     <TextView
         android:id="@+id/countdownTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/scoreTextView"
-        android:layout_centerHorizontal="true"
-        android:text="¡Ya!"
-        android:textSize="24sp" />
 
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ya"
+        android:textSize="24sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
     <Button
         android:id="@+id/greenButton"
         android:layout_width="100dp"
@@ -43,7 +49,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="74dp"
         android:backgroundTint="@color/normal_green"
-        android:contentDescription="Botón verde"
+        android:contentDescription="@string/bot_n_verde"
         app:iconTint="#008BC34A" />
 
     <Button
@@ -55,7 +61,7 @@
         android:layout_marginTop="78dp"
         android:layout_toEndOf="@id/greenButton"
         android:backgroundTint="@color/normal_red"
-        android:contentDescription="Botón rojo"
+        android:contentDescription="@string/bot_n_rojo"
         android:translationX="-4dp" />
 
     <Button
@@ -67,7 +73,7 @@
         android:layout_marginTop="254dp"
         android:layout_toEndOf="@id/redButton"
         android:backgroundTint="@color/normal_blue"
-        android:contentDescription="Botón azul"
+        android:contentDescription="@string/bot_n_azul"
         android:translationX="-1dp"
         android:translationY="-1dp" />
 
@@ -80,7 +86,9 @@
         android:layout_marginTop="253dp"
         android:layout_toEndOf="@id/blueButton"
         android:backgroundTint="@color/normal_yellow"
-        android:contentDescription="Botón amarillo"
+        android:contentDescription="@string/bot_n_amarillo"
         android:translationX="-4dp" />
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
