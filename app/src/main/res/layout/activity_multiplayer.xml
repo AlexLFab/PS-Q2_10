@@ -22,19 +22,21 @@
     <include
         android:id="@+id/include2"
         layout="@layout/simon"
-        android:layout_above="@id/include3"
+        android:layout_above="@id/tv_waiting"
         android:layout_below="@id/include1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         />
 
-    <include
-        android:id="@+id/include3"
-        layout="@layout/bottom_bar"
+
+    <TextView
+        android:id="@+id/tv_waiting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:text="@string/esperando_oponente"
+        android:textAlignment="center"
         />
 </RelativeLayout>

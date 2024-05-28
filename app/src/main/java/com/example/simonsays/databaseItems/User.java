@@ -22,5 +22,4 @@ public class User {
         this.uid = uid;
         this.record = 0;
     }
-
 }

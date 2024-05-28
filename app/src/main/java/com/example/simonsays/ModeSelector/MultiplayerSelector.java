@@ -14,55 +14,42 @@ import com.example.simonsays.Piano.PianoActivity;
 import com.example.simonsays.R;
 import com.example.simonsays.Simon.SimonActivity;
 import com.example.simonsays.Simon.SimonMultiplayer;
-import com.example.simonsays.StartActivity;
 
-public class ModeSelectorActivity extends AppCompatActivity {
-
+public class MultiplayerSelector extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mode_selector);
+        setContentView(R.layout.multiplayer_selector);
 
-        Button singlePlayerButton = findViewById(R.id.singlePlayerButton);
-        Button multiPlayerButton = findViewById(R.id.multiPlayerButton);
-        Button reflexTestButton = findViewById(R.id.reflexTest);
+        Button crearSalaButton = findViewById(R.id.crearSala);
+        Button unirseButton = findViewById(R.id.unirse);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        singlePlayerButton.setOnClickListener(new View.OnClickListener() {
+        crearSalaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                singlePlayer();
+                crearSala();
             }
         });
 
-        multiPlayerButton.setOnClickListener(new View.OnClickListener() {
+        unirseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                multiPlayer();
-            }
-        });
-
-        reflexTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reflexTest();
+                unirseSala();
             }
         });
     }
 
-    private void singlePlayer() {
-        Intent intent = new Intent(ModeSelectorActivity.this, SimonActivity.class);
+    private void crearSala() {
+        Intent intent = new Intent(MultiplayerSelector.this, SimonMultiplayer.class);
+        intent.putExtra("userNumber", 1);
         startActivity(intent);
     }
 
-    private void multiPlayer() {
-        Intent intent = new Intent(ModeSelectorActivity.this, MultiplayerSelector.class);
-        startActivity(intent);
-    }
-
-    private void reflexTest() {
-        Intent intent = new Intent(ModeSelectorActivity.this, PianoActivity.class);
+    private void unirseSala() {
+        Intent intent = new Intent(MultiplayerSelector.this, SimonMultiplayer.class);
+        intent.putExtra("userNumber", 2);
         startActivity(intent);
     }
 
