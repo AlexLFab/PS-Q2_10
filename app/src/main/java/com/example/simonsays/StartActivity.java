@@ -156,25 +156,8 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(newBase);
-        String language = sharedPreferences.getString("language_preference", "en");
-        Locale newLocale = new Locale(language);
-        Locale.setDefault(newLocale);
-
-        Resources res = newBase.getResources();
-        Configuration config = res.getConfiguration();
-        config.setLocale(newLocale);
-
-        Context context = newBase.createConfigurationContext(config);
-        super.attachBaseContext(context);
-    }
-
-
     private void applyLanguage() {
-        String language = sharedPreferences.getString("language_preference", "en");
+        String language = sharedPreferences.getString("language_preference", "");
         Log.d("Macedonia", "applyLanguage: " + language); // Agregar log para verificar el idioma
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
