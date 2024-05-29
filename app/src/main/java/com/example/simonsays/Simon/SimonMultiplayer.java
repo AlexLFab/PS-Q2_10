@@ -129,7 +129,9 @@ public class SimonMultiplayer extends AppCompatActivity {
                         if (String.valueOf(user2).equals("")){
                             //countdownTextView.setText("YOU WON!");
                             if (iniciado==1){
-                                Toast.makeText(SimonMultiplayer.this, "YOU WIN!! Congratilations", Toast.LENGTH_SHORT).show();
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra("result_key", 1); // Añadir el dato al Intent
+                                setResult(RESULT_OK, resultIntent);
                                 finish();
                             }
                             tv_waiting.setVisibility(View.INVISIBLE);
@@ -153,7 +155,9 @@ public class SimonMultiplayer extends AppCompatActivity {
                         user1 = dataSnapshot.getValue(String.class);
                         if (Objects.equals(user1, "")){
                             if (iniciado==1){
-                                Toast.makeText(SimonMultiplayer.this, "YOU WIN!! Congratilations", Toast.LENGTH_SHORT).show();
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra("result_key", 1); // Añadir el dato al Intent
+                                setResult(RESULT_OK, resultIntent);
                                 finish();
                             }
 
@@ -223,7 +227,6 @@ public class SimonMultiplayer extends AppCompatActivity {
 
 
         }else{
-            Log.d("Aqui?", "prueba");
             finish();
         }
 
@@ -356,9 +359,9 @@ public class SimonMultiplayer extends AppCompatActivity {
                     updateHighscore(score);
                 }
             } else {
-                Toast.makeText(this, "Error! YOU LOOSE", Toast.LENGTH_SHORT).show();
-                mDatabaseNext.setValue(0);
-                mDatabaseTurn.setValue(1);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         }else{
@@ -446,6 +449,9 @@ public class SimonMultiplayer extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
+                setResult(RESULT_OK, resultIntent);
                 this.finish();
                 return true;
         }

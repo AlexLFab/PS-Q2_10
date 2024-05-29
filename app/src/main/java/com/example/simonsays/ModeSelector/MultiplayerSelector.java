@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +18,7 @@ import com.example.simonsays.Simon.SimonActivity;
 import com.example.simonsays.Simon.SimonMultiplayer;
 
 public class MultiplayerSelector extends AppCompatActivity {
+    private static final int REQUEST_CODE = 111;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +47,28 @@ public class MultiplayerSelector extends AppCompatActivity {
     private void crearSala() {
         Intent intent = new Intent(MultiplayerSelector.this, SimonMultiplayer.class);
         intent.putExtra("userNumber", 1);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     private void unirseSala() {
         Intent intent = new Intent(MultiplayerSelector.this, SimonMultiplayer.class);
         intent.putExtra("userNumber", 2);
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                int result = data.getIntExtra("result_key", 0);
+                if (result==1)
+                    Toast.makeText(MultiplayerSelector.this, "YOU WIN!! Congratilations", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "YOU LOOSE!!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
