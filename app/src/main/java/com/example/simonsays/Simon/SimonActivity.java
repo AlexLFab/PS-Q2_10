@@ -71,7 +71,7 @@ public class SimonActivity extends AppCompatActivity {
         // Set initial values
         SharedPreferences preferences = getSharedPreferences("PREF", 0);
         highscore = preferences.getInt("highSimonscore", 0);
-        tv_score.setText(getString(R.string.score_label, score));
+        tv_score.setText(getString(R.string.score_label) +score);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
 
@@ -87,7 +87,7 @@ public class SimonActivity extends AppCompatActivity {
                                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
 
                                     int record = userSnapshot.child("record").getValue(Integer.class);
-                                    tv_beat.setText(getString(R.string.best, record));
+                                    tv_beat.setText(getString(R.string.best)+record);
 
                                 }
                             }
@@ -97,11 +97,11 @@ public class SimonActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
                             Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
-                            tv_beat.setText(getString(R.string.best, highscore));
+                            tv_beat.setText(getString(R.string.best) + highscore);
                         }
                     });
         }else{
-            tv_beat.setText(getString(R.string.best, highscore));
+            tv_beat.setText(getString(R.string.best) + highscore);
         }
 
         // Set button listeners
@@ -235,7 +235,7 @@ public class SimonActivity extends AppCompatActivity {
                 currentIndex = 0;
                 playerInput.clear();
                 score++;
-                tv_score.setText(getString(R.string.score_label, score));
+                tv_score.setText(getString(R.string.score_label) + score);
                 generateSequence();
                 player_turn = false;
                 startCountdown();
@@ -246,7 +246,7 @@ public class SimonActivity extends AppCompatActivity {
             currentIndex = 0;
             playerInput.clear();
             score = 0;
-            tv_score.setText(getString(R.string.score_label, score));
+            tv_score.setText(getString(R.string.score_label) + score);
             sequenceLength=1;
             sequence.clear();
             generateSequence();
@@ -279,7 +279,7 @@ public class SimonActivity extends AppCompatActivity {
                                         mDatabase.child(key).updateChildren(map);
 
                                         highscore = score;
-                                        tv_beat.setText(getString(R.string.best, score));
+                                        tv_beat.setText(getString(R.string.best) + highscore);
                                         SharedPreferences preferences = getSharedPreferences("PREF", 0);
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putInt("highSimonscore", record);
@@ -295,13 +295,13 @@ public class SimonActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
                             Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
-                            tv_beat.setText(getString(R.string.best, highscore));
+                            tv_beat.setText(getString(R.string.best) + highscore);
                         }
                     });
         }else{
             if (score>highscore) {
                 highscore = score;
-                tv_beat.setText(getString(R.string.best, highscore));
+                tv_beat.setText(getString(R.string.best) + highscore);
                 SharedPreferences preferences = getSharedPreferences("PREF", 0);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("highSimonscore", highscore);

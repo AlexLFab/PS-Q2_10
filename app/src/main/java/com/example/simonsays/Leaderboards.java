@@ -3,10 +3,11 @@ package com.example.simonsays;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,14 +22,22 @@ import java.util.List;
 
 public class Leaderboards extends AppCompatActivity {
 
-    TextView textView;
+    RecyclerView recyclerView;
     DatabaseReference mDatabase;
+    LeaderboardAdapter adapter;
+    List<String> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboards);
-        textView = findViewById(R.id.templeaderboard);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        userList = new ArrayList<>();
+        adapter = new LeaderboardAdapter(userList);
+        recyclerView.setAdapter(adapter);
+
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -37,7 +46,7 @@ public class Leaderboards extends AppCompatActivity {
         mDatabase.orderByChild("record").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<String> userList = new ArrayList<>();
+                userList.clear();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String username = userSnapshot.child("username").getValue(String.class);
                     Long recordValue = userSnapshot.child("record").getValue(Long.class);
@@ -46,12 +55,7 @@ public class Leaderboards extends AppCompatActivity {
                 }
                 // Invertir el orden de la lista
                 Collections.reverse(userList);
-
-                StringBuilder aux = new StringBuilder();
-                for (String user : userList) {
-                    aux.append(user).append("\n");
-                }
-                textView.setText(aux.toString());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
