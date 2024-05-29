@@ -17,8 +17,8 @@
 
     <ListPreference
         android:key="language_preference"
-        android:title="Language"
-        android:summary="Select your preferred language"
+        android:title="@string/language"
+        android:summary="@string/select_your_preferred_language"
         android:entries="@array/language_options"
         android:entryValues="@array/language_values"
         android:defaultValue="en" />

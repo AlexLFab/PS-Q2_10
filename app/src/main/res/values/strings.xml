@@ -36,4 +36,6 @@
     <string name="start_game">Start Game</string>
     <string name="log_in">Log In</string>
     <string name="leaderboards">LeaderBoards</string>
+    <string name="select_your_preferred_language">Select your preferred language</string>
+    <string name="language">Language</string>
 </resources>
