@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/logoImageView"
         android:layout_centerHorizontal="true"
-        android:text="Crear Sala" />
+        android:text="@string/crear_sala" />
 
     <Button
         android:id="@+id/unirse"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/crearSala"
         android:layout_centerHorizontal="true"
-        android:text="Unirse" />
+        android:text="@string/unirse" />
 
     <TextView
         android:id="@+id/noSala"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/unirse"
         android:layout_centerHorizontal="true"
-        android:text="No hay salas, intentelo de nuevo mas tarde" />
+        android:text="@string/no_hay_salas_intentelo_de_nuevo_mas_tarde" />
 
     <TextView
         android:id="@+id/textView"
@@ -48,7 +48,7 @@
         android:layout_centerInParent="true"
         android:scaleX="4"
         android:scaleY="4"
-        android:text="Simon Says!!"
+        android:text="@string/simon_says"
         android:translationY="-100dp" />
 
 </RelativeLayout>
