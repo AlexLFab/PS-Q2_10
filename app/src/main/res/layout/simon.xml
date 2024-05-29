@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <TextView
         android:id="@+id/countdownTextView"
 
@@ -23,6 +25,7 @@
         android:id="@+id/greenButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="32dp"
         android:layout_marginTop="74dp"
         android:backgroundTint="@color/normal_green"
@@ -33,8 +36,10 @@
         android:id="@+id/redButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="140dp"
         android:layout_marginTop="78dp"
+        android:layout_toEndOf="@id/greenButton"
         android:backgroundTint="@color/normal_red"
         android:contentDescription="@string/bot_n_rojo"
         android:translationX="-4dp" />
@@ -43,8 +48,10 @@
         android:id="@+id/blueButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="-340dp"
         android:layout_marginTop="254dp"
+        android:layout_toEndOf="@id/redButton"
         android:backgroundTint="@color/normal_blue"
         android:contentDescription="@string/bot_n_azul"
         android:translationX="-1dp"
@@ -54,8 +61,10 @@
         android:id="@+id/yellowButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/countdownTextView"
         android:layout_marginStart="140dp"
         android:layout_marginTop="253dp"
+        android:layout_toEndOf="@id/blueButton"
         android:backgroundTint="@color/normal_yellow"
         android:contentDescription="@string/bot_n_amarillo"
         android:translationX="-4dp" />

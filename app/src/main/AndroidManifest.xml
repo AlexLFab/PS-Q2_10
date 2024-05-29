@@ -13,10 +13,31 @@
         android:theme="@style/Theme.SimonSays"
         tools:targetApi="31">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Leaderboards"
+            android:exported="false" />
+        <activity
+            android:name=".Register"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
             android:name=".Simon.SimonActivity"
             android:exported="false" />
         <activity
+            android:name=".Simon.SimonMultiplayer"
+            android:exported="false" />
+        <activity
             android:name=".Piano.PianoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModeSelector.ModeSelectorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModeSelector.MultiplayerSelector"
             android:exported="false" />
         <activity
             android:name=".StartActivity"

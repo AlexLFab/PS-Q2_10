@@ -21,7 +21,7 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/simon"
+        layout="@layout/grid"
         android:layout_above="@id/include3"
         android:layout_below="@id/include1"
         android:layout_width="match_parent"

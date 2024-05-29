@@ -5,14 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".StartActivity">
+    <TextView
+        android:id="@+id/usernameDisplay"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
 
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="328dp"
         android:layout_height="328dp"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:src="@drawable/img_logo"
         android:translationY="-50dp" />
 
@@ -23,7 +26,9 @@
         android:layout_below="@id/logoImageView"
         android:layout_centerHorizontal="true"
         android:onClick="startGame"
-        android:text="Start Game" />
+        android:text="@string/start_game"
+
+        />
 
     <Button
         android:id="@+id/menuButton"
@@ -32,16 +37,25 @@
         android:layout_below="@id/startButton"
         android:layout_centerHorizontal="true"
         android:onClick="menuGame"
-        android:text="Settings" />
+        android:text="@string/settings" />
 
     <Button
-        android:id="@+id/tutorialButton"
+        android:id="@+id/logInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/menuButton"
         android:layout_centerHorizontal="true"
-        android:onClick="tutorialGame"
-        android:text="Tutorial" />
+        android:onClick="logIn"
+        android:text="@string/log_in" />
+
+    <Button
+        android:id="@+id/leaderboards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logInButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="leaderboards"
+        android:text="@string/leaderboards" />
 
     <TextView
         android:id="@+id/textView"
@@ -51,7 +65,7 @@
         android:layout_centerInParent="true"
         android:scaleX="4"
         android:scaleY="4"
-        android:text="Simon Says!!"
+        android:text="@string/simon_says"
         android:translationY="-100dp" />
 
 

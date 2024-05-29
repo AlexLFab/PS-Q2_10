@@ -1,18 +1,33 @@
 package com.example.simonsays.Simon;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.example.simonsays.R;
+import com.example.simonsays.StartActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class SimonActivity extends AppCompatActivity {
@@ -24,14 +39,16 @@ public class SimonActivity extends AppCompatActivity {
     private Button b_play;
     private TextView tv_score, tv_beat;
     private int currentIndex = 0;
-    private int sequenceLength = 5;
+    private int sequenceLength;
 
-    private int score = 0;
+    private int score;
     private int highscore = 0;
 
     private boolean player_turn = false;
 
     private Handler handler = new Handler();
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +64,45 @@ public class SimonActivity extends AppCompatActivity {
         countdownTextView = findViewById(R.id.countdownTextView);
         tv_score = findViewById(R.id.tv_score);
         tv_beat = findViewById(R.id.tv_beat);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         // Set initial values
         SharedPreferences preferences = getSharedPreferences("PREF", 0);
         highscore = preferences.getInt("highSimonscore", 0);
         tv_score.setText(getString(R.string.score_label, score));
-        tv_beat.setText(getString(R.string.best, highscore));
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
+
+
+        if(mAuth.getUid() != null && isNetworkAvailable()) {
+
+
+            mDatabase.orderByChild("uid").equalTo(mAuth.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+
+                                    int record = userSnapshot.child("record").getValue(Integer.class);
+                                    tv_beat.setText(getString(R.string.best, record));
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Error en la consulta
+                            Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            tv_beat.setText(getString(R.string.best, highscore));
+                        }
+                    });
+        }else{
+            tv_beat.setText(getString(R.string.best, highscore));
+        }
 
         // Set button listeners
         greenButton.setOnClickListener(v -> onColorButtonClicked(0));
@@ -66,7 +116,7 @@ public class SimonActivity extends AppCompatActivity {
 
     private void startGame() {
         score = 0;
-        sequenceLength = 5;
+        sequenceLength = 1;
         b_play.setVisibility(View.INVISIBLE);
         playerInput.clear();
         sequence.clear();
@@ -94,12 +144,12 @@ public class SimonActivity extends AppCompatActivity {
     }
 
     private void generateSequence() {
-        sequence.clear(); // Clear the old sequence
+        //sequence.clear(); // Clear the old sequence
         Random random = new Random();
         for (int i = 0; i < sequenceLength; i++) {
             int next = random.nextInt(4);
             sequence.add(next); // 0: green, 1: red, 2: blue, 3: yellow
-            Log.d("Color Sequence: ", String.valueOf(next));
+            Log.d("Color Sequence: ", String.valueOf(sequence));
         }
     }
 
@@ -138,7 +188,12 @@ public class SimonActivity extends AppCompatActivity {
                             }, 1500); // Des-resalta el botón después de 1.5 segundos
                             if (finalI == sequence.size() - 1) {
                                 player_turn = true;
-                                startCountdown();
+                                new android.os.Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startCountdown();
+                                    }
+                                }, 1500);
                                 enableButtons(); // Activar los botones al final de la secuencia
                             }
                         }
@@ -189,17 +244,7 @@ public class SimonActivity extends AppCompatActivity {
                 generateSequence();
                 player_turn = false;
                 startCountdown();
-                if (score % 5 == 0) {
-                    sequenceLength++;
-                }
-                if (score > highscore) {
-                    highscore = score;
-                    tv_beat.setText(getString(R.string.best, highscore));
-                    SharedPreferences preferences = getSharedPreferences("PREF", 0);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("highSimonscore", highscore);
-                    editor.apply();
-                }
+                updateHighscore(score);
             }
         } else {
             Toast.makeText(this, "Error! Try again.", Toast.LENGTH_SHORT).show();
@@ -207,12 +252,83 @@ public class SimonActivity extends AppCompatActivity {
             playerInput.clear();
             score = 0;
             tv_score.setText(getString(R.string.score_label, score));
+            sequenceLength=1;
+            sequence.clear();
             generateSequence();
             player_turn = false;
             startCountdown();
-            if (sequenceLength > 5) {
-                sequenceLength--;
+
+        }
+    }
+
+    private void updateHighscore(int score){
+        Log.d("Update", "Entra en el update");
+
+        if(mAuth.getUid() != null && isNetworkAvailable()) {
+
+
+            mDatabase.orderByChild("uid").equalTo(mAuth.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+
+                                    int record = userSnapshot.child("record").getValue(Integer.class);
+                                    if (score>record){
+                                        Log.d("Update", "La score es mayor que el record del user");
+                                        String key = userSnapshot.getKey();
+                                        HashMap<String, Object> map = new HashMap<>();
+                                        map.put("record", score);
+
+                                        mDatabase.child(key).updateChildren(map);
+
+                                        highscore = score;
+                                        tv_beat.setText(getString(R.string.best, score));
+                                        SharedPreferences preferences = getSharedPreferences("PREF", 0);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putInt("highSimonscore", record);
+                                        editor.apply();
+
+                                    }
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Error en la consulta
+                            Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            tv_beat.setText(getString(R.string.best, highscore));
+                        }
+                    });
+        }else{
+            if (score>highscore) {
+                highscore = score;
+                tv_beat.setText(getString(R.string.best, highscore));
+                SharedPreferences preferences = getSharedPreferences("PREF", 0);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("highSimonscore", highscore);
+                editor.apply();
             }
         }
+
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
