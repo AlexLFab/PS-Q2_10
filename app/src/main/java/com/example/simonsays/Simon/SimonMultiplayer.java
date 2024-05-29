@@ -1,6 +1,9 @@
 package com.example.simonsays.Simon;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -48,7 +51,9 @@ public class SimonMultiplayer extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseUsers, mDatabaseNext, mDatabaseTurn, mDatabaseUser1, mDatabaseUser2;
     private ArrayList<Integer> sequence = new ArrayList<>();
-    private static int userNumber = 0;
+    private int userNumber = 0;
+    private int salaNumber;
+    private String salaName;
     private int turnSala;
     private String user1, user2;
     int nextSala;
@@ -76,6 +81,8 @@ public class SimonMultiplayer extends AppCompatActivity {
         tv_beat = findViewById(R.id.tv_beat);
         Intent intent = getIntent();
         userNumber = intent.getIntExtra("userNumber", 0);
+        salaNumber = intent.getIntExtra("salaNumber", 0);
+        salaName="Sala"+ String.valueOf(salaNumber);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -87,10 +94,10 @@ public class SimonMultiplayer extends AppCompatActivity {
         tv_score.setText(getString(R.string.score_label, score));
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
-        mDatabaseNext = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala1/Next");
-        mDatabaseTurn = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala1/Turn");
-        mDatabaseUser1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala1/User1");
-        mDatabaseUser2 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala1/User2");
+        mDatabaseNext = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala"+String.valueOf(salaNumber)+"/Next");
+        mDatabaseTurn = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala"+String.valueOf(salaNumber)+"/Turn");
+        mDatabaseUser1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala"+String.valueOf(salaNumber)+"/User1");
+        mDatabaseUser2 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas/Sala"+String.valueOf(salaNumber)+"/User2");
 
         countdownTextView.setText("");
 
@@ -131,12 +138,13 @@ public class SimonMultiplayer extends AppCompatActivity {
                             if (iniciado==1){
                                 Intent resultIntent = new Intent();
                                 resultIntent.putExtra("result_key", 1); // Añadir el dato al Intent
+                                resultIntent.putExtra("result_sala", salaName);
                                 setResult(RESULT_OK, resultIntent);
                                 finish();
                             }
                             tv_waiting.setVisibility(View.INVISIBLE);
 
-                        }else {
+                        }else if (String.valueOf(user2)!="null"){
                             mDatabaseTurn.setValue(turnSala+1);
                             startGame();
                         }
@@ -157,6 +165,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                             if (iniciado==1){
                                 Intent resultIntent = new Intent();
                                 resultIntent.putExtra("result_key", 1); // Añadir el dato al Intent
+                                resultIntent.putExtra("result_sala", salaName);
                                 setResult(RESULT_OK, resultIntent);
                                 finish();
                             }
@@ -176,7 +185,8 @@ public class SimonMultiplayer extends AppCompatActivity {
             mDatabaseNext.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    nextSala = dataSnapshot.getValue(Integer.class);
+                    if (dataSnapshot.getValue(Integer.class)!=null)
+                        nextSala = dataSnapshot.getValue(Integer.class);
                 }
 
                 @Override
@@ -188,33 +198,35 @@ public class SimonMultiplayer extends AppCompatActivity {
             mDatabaseTurn.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    turnSala = dataSnapshot.getValue(Integer.class);
-                    if (turnSala==1)
-                        iniciado=1;
-                    if (turnSala!=0)
-                        sequence.add(nextSala);
-                    if (userNumber==1){
-                        if (turnSala%2!=0){
-                            startCountdown();
-                            tv_waiting.setVisibility(View.INVISIBLE);
-                        }else{
-                            if (turnSala!=0)
-                                countdownTextView.setText("Buena Eleccion!");
-                            disableButtons();
-                            tv_waiting.setVisibility(View.VISIBLE);
-                        }
-                    } else if (userNumber==2) {
-                        if (turnSala%2==0 && turnSala!=0 ){
-                            startCountdown();
-                            tv_waiting.setVisibility(View.INVISIBLE);
-                        }else{
-                            if (turnSala<2)
-                                countdownTextView.setText("");
-                            else
-                                countdownTextView.setText("Buena Eleccion!");
-                            disableButtons();
-                            tv_waiting.setVisibility(View.VISIBLE);
+                    if (dataSnapshot.getValue(Integer.class)!=null){
+                        turnSala = dataSnapshot.getValue(Integer.class);
+                        if (turnSala==1){
+                            Log.d("PRUEBA2", "Aqui cambia a 1");
+                            iniciado=1;}
+                        if (turnSala!=0)
+                            sequence.add(nextSala);
+                        if (userNumber==1){
+                            if (turnSala%2!=0){
+                                startCountdown();
+                                tv_waiting.setVisibility(View.INVISIBLE);
+                            }else{
+                                if (turnSala!=0)
+                                    countdownTextView.setText("Buena Eleccion!");
+                                disableButtons();
+                                tv_waiting.setVisibility(View.VISIBLE);
+                            }
+                        } else if (userNumber==2) {
+                            if (turnSala % 2 == 0 && turnSala != 0) {
+                                startCountdown();
+                                tv_waiting.setVisibility(View.INVISIBLE);
+                            } else {
+                                if (turnSala < 2)
+                                    countdownTextView.setText("");
+                                else
+                                    countdownTextView.setText("Buena Eleccion!");
+                                disableButtons();
+                                tv_waiting.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
@@ -227,6 +239,7 @@ public class SimonMultiplayer extends AppCompatActivity {
 
 
         }else{
+            Toast.makeText(SimonMultiplayer.this, "Debes iniciar sesión para jugar el modo multijugador", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -361,6 +374,7 @@ public class SimonMultiplayer extends AppCompatActivity {
             } else {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
+                resultIntent.putExtra("result_sala", salaName);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
@@ -451,11 +465,32 @@ public class SimonMultiplayer extends AppCompatActivity {
             case android.R.id.home:
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
+                resultIntent.putExtra("result_sala", salaName);
                 setResult(RESULT_OK, resultIntent);
                 this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        // Muestra un cuadro de diálogo de confirmación antes de cerrar la actividad
+        new AlertDialog.Builder(this)
+                .setMessage("¿Estás seguro de que deseas salir?")
+                .setCancelable(false)
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
+                        resultIntent.putExtra("result_sala", salaName);
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

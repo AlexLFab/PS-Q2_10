@@ -33,6 +33,14 @@
         android:text="Unirse" />
 
     <TextView
+        android:id="@+id/noSala"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unirse"
+        android:layout_centerHorizontal="true"
+        android:text="No hay salas, intentelo de nuevo mas tarde" />
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
