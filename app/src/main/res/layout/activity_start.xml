@@ -26,7 +26,7 @@
         android:layout_below="@id/logoImageView"
         android:layout_centerHorizontal="true"
         android:onClick="startGame"
-        android:text="Start Game"
+        android:text="@string/start_game"
 
         />
 
@@ -37,7 +37,7 @@
         android:layout_below="@id/startButton"
         android:layout_centerHorizontal="true"
         android:onClick="menuGame"
-        android:text="Settings" />
+        android:text="@string/settings" />
 
     <Button
         android:id="@+id/logInButton"
@@ -46,7 +46,7 @@
         android:layout_below="@id/menuButton"
         android:layout_centerHorizontal="true"
         android:onClick="logIn"
-        android:text="Log In" />
+        android:text="@string/log_in" />
 
     <Button
         android:id="@+id/leaderboards"
@@ -55,7 +55,7 @@
         android:layout_below="@id/logInButton"
         android:layout_centerHorizontal="true"
         android:onClick="leaderboards"
-        android:text="LeaderBoards" />
+        android:text="@string/leaderboards" />
 
     <TextView
         android:id="@+id/textView"
@@ -65,7 +65,7 @@
         android:layout_centerInParent="true"
         android:scaleX="4"
         android:scaleY="4"
-        android:text="Simon Says!!"
+        android:text="@string/simon_says"
         android:translationY="-100dp" />
 
 

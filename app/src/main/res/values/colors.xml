@@ -5,10 +5,22 @@
     <color name="normal_green">#00FF00</color>
     <color name="normal_red">#FF0000</color>
     <color name="normal_blue">#0000FF</color>
-    <color name="normal_yellow">#FFFF00</color>
+    <color name="normal_yellow">#E0A800</color>
     <color name="highlight_green">#66FF66</color>
     <color name="highlight_red">#FF6666</color>
     <color name="highlight_blue">#6666FF</color>
     <color name="highlight_yellow">#FFFF66</color>
     <!-- Puedes ajustar los códigos de color según tus preferencias -->
+
+    <color name="colorPrimary">#BB86FC</color> <!-- Púrpura suave -->
+    <color name="colorPrimaryDark">#3700B3</color> <!-- Azul oscuro -->
+    <color name="colorAccent">#03DAC5</color> <!-- Verde azulado -->
+    <color name="backgroundColor">#121212</color> <!-- Gris oscuro para fondo -->
+    <color name="textColor">#FFFFFF</color> <!-- Blanco para texto -->
+
+    <color name="colorPrimary1">#6200EE</color> <!-- Azul vibrante -->
+    <color name="colorPrimaryDark1">#3700B3</color> <!-- Azul oscuro -->
+    <color name="colorAccent1">#03DAC5</color> <!-- Verde azulado -->
+    <color name="backgroundColor1">#FFFFFF</color> <!-- Blanco para fondo -->
+    <color name="textColor1">#000000</color> <!-- Negro para texto -->
 </resources>
