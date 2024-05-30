@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +17,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import com.example.simonsays.ModeSelector.ModeSelectorActivity;
 import com.example.simonsays.Piano.PianoActivity;
@@ -52,6 +58,11 @@ public class StartActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_start);
 
+
+        PeriodicWorkRequest leaderboardWorkRequest =
+                new PeriodicWorkRequest.Builder(LeaderboardWorker.class, 15, TimeUnit.MINUTES)
+                        .build();
+        WorkManager.getInstance(this).enqueue(leaderboardWorkRequest);
 
 
         Button startButton = findViewById(R.id.startButton);
@@ -112,6 +123,12 @@ public class StartActivity extends AppCompatActivity {
                                     String username = userSnapshot.child("username").getValue(String.class);
                                     textView.setText(username);
 
+
+                                    // Guardar el nombre de usuario en SharedPreferences
+                                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putString("current_user", username);
+                                    editor.apply();
                                 }
                             }
                         }
@@ -206,4 +223,6 @@ public class StartActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
 }
