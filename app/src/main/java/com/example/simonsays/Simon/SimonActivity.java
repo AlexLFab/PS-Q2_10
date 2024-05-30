@@ -1,6 +1,7 @@
 package com.example.simonsays.Simon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.R;
 import com.example.simonsays.StartActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -185,11 +188,15 @@ public class SimonActivity extends AppCompatActivity {
                                 public void run() {
                                     unhighlightButtons();
                                 }
-                            }, 1500); // Des-resalta el botón después de 1.5 segundos
+                            }, 1500);// Des-resalta el botón después de 1.5 segundos
                             if (finalI == sequence.size() - 1) {
                                 player_turn = true;
+                                new android.os.Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
                                 startCountdown();
-                                enableButtons(); // Activar los botones al final de la secuencia
+                                    }
+                                },1500);
                             }
                         }
                     }, finalI * 2000); // Resalta cada botón con un retraso de 2 segundos
@@ -325,5 +332,22 @@ public class SimonActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }

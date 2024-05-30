@@ -8,8 +8,7 @@ import androidx.preference.PreferenceManager;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +16,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.simonsays.Music.MusicViewModel;
+import com.example.simonsays.Music.AudioService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,19 +33,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.example.simonsays.ModeSelector.ModeSelectorActivity;
-import com.example.simonsays.Piano.PianoActivity;
-import com.example.simonsays.Simon.SimonActivity;
 
 public class StartActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     Boolean isLogged = false;
     private FirebaseAuth mAuth;
 
-    private MusicViewModel musicViewModel;
     private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,42 +68,15 @@ public class StartActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
 
-
-        // Obtener las preferencias y aplicar el modo nocturno si está activado
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        if (isNightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-
-
-        // Obtener el ViewModel
-        musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
-
-        // Configurar el volumen inicial basado en la preferencia
-        int volume = sharedPreferences.getInt("music_volume", 50);
-        setMusicVolume(volume);
-
-        // Registrar un listener para cambios en las preferencias
-        sharedPreferences.registerOnSharedPreferenceChangeListener((prefs, key) -> {
-            if (key.equals("music_volume")) {
-                int newVolume = prefs.getInt(key, 50);
-                setMusicVolume(newVolume);
+            // Obtener las preferencias y aplicar el modo nocturno si está activado
+            boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+            if (isNightMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-            if (key.equals("night_mode")) {
-                recreate();
-            }
-            if (key.equals("language_preference")) {
-                applyLanguage();
-                recreate();
-            }
-        });
 
-        // Iniciar la reproducción de la música
-        if (!musicViewModel.getMediaPlayer().isPlaying()) {
-            musicViewModel.getMediaPlayer().start();
-        }
+
 
         if(mAuth.getUid() != null && isNetworkAvailable()) {
 
@@ -172,6 +140,35 @@ public class StartActivity extends AppCompatActivity {
             }
         });
     }
+    // Método para verificar si el servicio está en ejecución
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
+    }
+
+
 
     private void applyLanguage() {
         String language = sharedPreferences.getString("language_preference", "");
@@ -190,12 +187,7 @@ public class StartActivity extends AppCompatActivity {
         Log.d("Macedonia", "Idioma aplicado: " + config.locale.getLanguage());
     }
 
-    private void setMusicVolume(int volume) {
-        float volumeLevel = volume / 100.0f;
-        if (musicViewModel.getMediaPlayer() != null) {
-            musicViewModel.getMediaPlayer().setVolume(volumeLevel, volumeLevel);
-        }
-    }
+
 
 
     private void startGame() {

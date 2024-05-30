@@ -23,6 +23,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.R;
 import com.example.simonsays.databaseItems.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -516,6 +517,10 @@ public class SimonMultiplayer extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+
         if (userNumber==1){
             Random random = new Random();
             mDatabaseNext.setValue(random.nextInt(4));
@@ -529,5 +534,12 @@ public class SimonMultiplayer extends AppCompatActivity {
             mDatabaseUser2.setValue("");
             userNumber=0;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }
