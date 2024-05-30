@@ -9,18 +9,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.simonsays.Music.AudioService;
+import com.example.simonsays.databinding.ActivitySettingsBinding;
 import com.example.simonsays.fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
+    ActivitySettingsBinding binding;
 
     private boolean wasMusicPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.R;
 import com.example.simonsays.StartActivity;
+import com.example.simonsays.databinding.ActivitySimonBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class SimonActivity extends AppCompatActivity {
-
+    ActivitySimonBinding binding;
     private ArrayList<Integer> sequence = new ArrayList<>();
     private ArrayList<Integer> playerInput = new ArrayList<>();
     private TextView countdownTextView;
@@ -56,17 +57,22 @@ public class SimonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simon);
+        binding = ActivitySimonBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+
 
         // Initialize buttons and text views
-        greenButton = findViewById(R.id.greenButton);
-        redButton = findViewById(R.id.redButton);
-        blueButton = findViewById(R.id.blueButton);
-        yellowButton = findViewById(R.id.yellowButton);
-        b_play = findViewById(R.id.b_play);
-        countdownTextView = findViewById(R.id.countdownTextView);
-        tv_score = findViewById(R.id.tv_score);
-        tv_beat = findViewById(R.id.tv_beat);
+        greenButton = binding.include2.greenButton;
+        redButton = binding.include2.redButton;
+        blueButton = binding.include2.blueButton;
+        yellowButton = binding.include2.yellowButton;
+        b_play = binding.include3.bPlay;
+        countdownTextView = binding.include2.countdownTextView;
+        tv_score = binding.include1.tvScore;
+        tv_beat = binding.include1.tvBeat;
+        
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -74,7 +80,7 @@ public class SimonActivity extends AppCompatActivity {
         // Set initial values
         SharedPreferences preferences = getSharedPreferences("PREF", 0);
         highscore = preferences.getInt("highSimonscore", 0);
-        tv_score.setText(getString(R.string.score_label) +score);
+        tv_score.setText(getString(R.string.score_label) + score);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
 

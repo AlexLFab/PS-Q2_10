@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.simonsays.Music.MusicViewModel;
 import com.example.simonsays.Music.AudioService;
+import com.example.simonsays.databinding.ActivityStartBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,8 +39,8 @@ import java.util.concurrent.TimeUnit;
 import com.example.simonsays.ModeSelector.ModeSelectorActivity;
 
 public class StartActivity extends AppCompatActivity {
+    private ActivityStartBinding binding;
     private DatabaseReference mDatabase;
-    Boolean isLogged = false;
     private FirebaseAuth mAuth;
 
     private SharedPreferences sharedPreferences;
@@ -47,12 +48,12 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        binding = ActivityStartBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         applyLanguage();
-
-        setContentView(R.layout.activity_start);
-
 
         PeriodicWorkRequest leaderboardWorkRequest =
                 new PeriodicWorkRequest.Builder(LeaderboardWorker.class, 15, TimeUnit.MINUTES)
@@ -60,11 +61,6 @@ public class StartActivity extends AppCompatActivity {
         WorkManager.getInstance(this).enqueue(leaderboardWorkRequest);
 
 
-        Button startButton = findViewById(R.id.startButton);
-        Button menuButton = findViewById(R.id.menuButton);
-        Button logInButton = findViewById(R.id.logInButton);
-        Button leaderboardsButton = findViewById(R.id.leaderboards);
-        TextView textView = findViewById(R.id.usernameDisplay);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
 
@@ -77,9 +73,7 @@ public class StartActivity extends AppCompatActivity {
             }
 
 
-
         if(mAuth.getUid() != null && isNetworkAvailable()) {
-
 
             mDatabase.orderByChild("uid").equalTo(mAuth.getUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -89,7 +83,7 @@ public class StartActivity extends AppCompatActivity {
                                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
 
                                     String username = userSnapshot.child("username").getValue(String.class);
-                                    textView.setText(username);
+                                    binding.usernameDisplay.setText(username);
 
 
                                     // Guardar el nombre de usuario en SharedPreferences
@@ -105,40 +99,18 @@ public class StartActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
                             Toast.makeText(StartActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
-                            textView.setText("Guest");
+                            binding.usernameDisplay.setText("Guest");
                         }
                     });
         }else{
-            textView.setText("Guest");
+            binding.usernameDisplay.setText("Guest");
         }
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGame();
-            }
-        });
 
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuGame();
-            }
-        });
+        binding.startButton.setOnClickListener(this::startGame);
+        binding.menuButton.setOnClickListener(this::menuGame);
+        binding.logInButton.setOnClickListener(this::logIn);
+        binding.leaderboards.setOnClickListener(this::leaderboards);
 
-        logInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logIn();
-            }
-
-
-        });
-        leaderboardsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                leaderboards();
-            }
-        });
     }
     // Método para verificar si el servicio está en ejecución
     private boolean isServiceRunning(Class<?> serviceClass) {
@@ -190,22 +162,22 @@ public class StartActivity extends AppCompatActivity {
 
 
 
-    private void startGame() {
+    private void startGame(View view) {
         Intent intent = new Intent(StartActivity.this, ModeSelectorActivity.class);
         startActivity(intent);
     }
 
-    private void menuGame() {
+    private void menuGame(View view) {
         Intent intent = new Intent(StartActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void leaderboards(){
+    private void leaderboards(View view){
         Intent intent = new Intent(StartActivity.this, Leaderboards.class);
         startActivity(intent);
     }
 
-    private void logIn() {
+    private void logIn(View view) {
         Intent intent = new Intent(StartActivity.this, Login.class);
         startActivity(intent);
     }

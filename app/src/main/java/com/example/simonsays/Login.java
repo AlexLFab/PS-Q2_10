@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.simonsays.Music.AudioService;
+import com.example.simonsays.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,25 +23,23 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
     String TAG = "_TAG";
-
-    TextInputEditText editTextUsername, editTextPassword;
-    Button buttonReg, goToReg;
+    ActivityLoginBinding binding;
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        editTextUsername = findViewById(R.id.usernameLog);
-        editTextPassword = findViewById(R.id.passwordLog);
-        buttonReg = findViewById(R.id.buttonLog);
-        goToReg = findViewById(R.id.gotoRegButton);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
 
-        goToReg.setOnClickListener(new View.OnClickListener() {
+        binding.gotoRegButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Login.this, Register.class);
@@ -48,12 +47,12 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        binding.buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username, password;
-                username = String.valueOf(editTextUsername.getText());
-                password = String.valueOf(editTextPassword.getText());
+                username = String.valueOf(binding.usernameLog.getText());
+                password = String.valueOf(binding.passwordLog.getText());
 
                 if (username.isEmpty()) {
                     Toast.makeText(Login.this, "Enter username", Toast.LENGTH_SHORT).show();
