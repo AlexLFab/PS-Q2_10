@@ -145,6 +145,38 @@ public class StartActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        if(mAuth.getUid() != null && isNetworkAvailable()) {
+
+            mDatabase.orderByChild("uid").equalTo(mAuth.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+
+                                    String username = userSnapshot.child("username").getValue(String.class);
+                                    binding.usernameDisplay.setText(username);
+
+
+                                    // Guardar el nombre de usuario en SharedPreferences
+                                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putString("current_user", username);
+                                    editor.apply();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Error en la consulta
+                            Toast.makeText(StartActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            binding.usernameDisplay.setText("Guest");
+                        }
+                    });
+        }else{
+            binding.usernameDisplay.setText("Guest");
+        }
         Intent i = new Intent(this, AudioService.class);
         i.putExtra("action", AudioService.START);
         startService(i);
