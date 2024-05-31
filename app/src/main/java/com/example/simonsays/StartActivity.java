@@ -1,5 +1,7 @@
 package com.example.simonsays;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -112,17 +114,25 @@ public class StartActivity extends AppCompatActivity {
         binding.leaderboards.setOnClickListener(this::leaderboards);
 
     }
-    // Método para verificar si el servicio está en ejecución
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
+
+    private void adjustMusicVolume() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        float volume = 0.5f; // Valor predeterminado
+
+        try {
+            volume = prefs.getFloat("music_volume", 0.5f);  // Intenta obtener el valor como flotante
+        } catch (ClassCastException e) {
+            // Si hay una excepción de conversión, intenta obtenerlo como entero y conviértelo a flotante
+            int volumeInt = prefs.getInt("music_volume", 50); // Valor predeterminado en porcentaje
+            volume = volumeInt / 100.0f; // Convertir a escala de 0 a 1
+        }
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.SET_VOLUME);
+        i.putExtra("volume", volume);
+        startService(i);
+    }
     @Override
     public void onPause() {
         super.onPause();
@@ -138,6 +148,7 @@ public class StartActivity extends AppCompatActivity {
         Intent i = new Intent(this, AudioService.class);
         i.putExtra("action", AudioService.START);
         startService(i);
+        adjustMusicVolume();
     }
 
 
@@ -159,6 +170,7 @@ public class StartActivity extends AppCompatActivity {
         Log.d("Macedonia", "Idioma aplicado: " + config.locale.getLanguage());
     }
 
+    // Método para inicializar o actualizar el servicio de música con el volumen proporcionado
 
 
 
