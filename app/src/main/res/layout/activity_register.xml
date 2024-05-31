@@ -47,7 +47,7 @@
 
     <Button
         android:id="@+id/buttonReg"
-        android:hint="@string/register"
+        android:text="@string/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

@@ -36,13 +36,13 @@
 
     <Button
         android:id="@+id/buttonLog"
-        android:hint="@string/login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/login"/>
 
     <Button
         android:id="@+id/gotoRegButton"
-        android:hint="@string/gotoreg"
+        android:text="@string/gotoreg"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>

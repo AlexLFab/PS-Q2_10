@@ -94,8 +94,6 @@ public class PianoActivity extends AppCompatActivity {
                 binding.include2.iv52.setImageResource(emptyImage);
                 binding.include2.iv53.setImageResource(emptyImage);
 
-                Toast.makeText(PianoActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-
                 if (currentScore>beatScore){
                     beatScore = currentScore;
                     binding.include1.tvBeat.setText(getString(R.string.best)+ beatScore);
