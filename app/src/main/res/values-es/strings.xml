@@ -38,4 +38,5 @@
     <string name="leaderboards">Clasificación</string>
     <string name="select_your_preferred_language">Selecciona tu lenguaje. CUIDADO: La app se reiniciará</string>
     <string name="language">Lenguaje</string>
+    <string name="record">Record</string>
 </resources>

@@ -43,7 +43,7 @@ public class PianoActivity extends AppCompatActivity {
         setContentView(view);
 
 
-        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        SharedPreferences preferences = getSharedPreferences("PREF", 0);
         beatScore = preferences.getInt("highscore", 0);
 
         ActionBar actionBar = getSupportActionBar();

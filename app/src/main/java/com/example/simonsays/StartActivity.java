@@ -47,13 +47,13 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        applyLanguage();
+
         super.onCreate(savedInstanceState);
         binding = ActivityStartBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        applyLanguage();
 
         PeriodicWorkRequest leaderboardWorkRequest =
                 new PeriodicWorkRequest.Builder(LeaderboardWorker.class, 15, TimeUnit.MINUTES)
