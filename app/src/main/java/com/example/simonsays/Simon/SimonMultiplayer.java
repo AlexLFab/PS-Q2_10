@@ -23,8 +23,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.R;
 import com.example.simonsays.databaseItems.User;
+import com.example.simonsays.databinding.ActivityMultiplayerBinding;
+import com.example.simonsays.databinding.MultiplayerSelectorBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +44,8 @@ import java.util.Random;
 import com.example.simonsays.databaseItems.User;
 
 public class SimonMultiplayer extends AppCompatActivity {
+
+    ActivityMultiplayerBinding binding;
     private Button greenButton, redButton, blueButton, yellowButton;
     private TextView tv_waiting;
     private Button b_play;
@@ -65,20 +70,26 @@ public class SimonMultiplayer extends AppCompatActivity {
     private int iniciado = 0;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiplayer);
+        binding = ActivityMultiplayerBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+
 
         // Initialize buttons and text views
-        greenButton = findViewById(R.id.greenButton);
-        redButton = findViewById(R.id.redButton);
-        blueButton = findViewById(R.id.blueButton);
-        yellowButton = findViewById(R.id.yellowButton);
-        tv_waiting = findViewById(R.id.tv_waiting);
-        countdownTextView = findViewById(R.id.countdownTextView);
-        tv_score = findViewById(R.id.tv_score);
-        tv_beat = findViewById(R.id.tv_beat);
+        greenButton = binding.include2.greenButton;
+        redButton = binding.include2.redButton;
+        blueButton = binding.include2.blueButton;
+        yellowButton = binding.include2.yellowButton;
+        tv_waiting = binding.tvWaiting;
+        countdownTextView = binding.include2.countdownTextView;
+        tv_score = binding.include1.tvScore;
+        tv_beat = binding.include1.tvBeat;
         Intent intent = getIntent();
         userNumber = intent.getIntExtra("userNumber", 0);
         salaNumber = intent.getIntExtra("salaNumber", 0);
@@ -516,6 +527,10 @@ public class SimonMultiplayer extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+
         if (userNumber==1){
             Random random = new Random();
             mDatabaseNext.setValue(random.nextInt(4));
@@ -529,5 +544,12 @@ public class SimonMultiplayer extends AppCompatActivity {
             mDatabaseUser2.setValue("");
             userNumber=0;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }

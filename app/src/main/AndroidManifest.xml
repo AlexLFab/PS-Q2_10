@@ -49,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".Music.AudioService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

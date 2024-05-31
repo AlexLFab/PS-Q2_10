@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.example.simonsays.Music.AudioService;
+import com.example.simonsays.databinding.ActivityLeaderboardsBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,8 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Leaderboards extends AppCompatActivity {
-
-    RecyclerView recyclerView;
+    ActivityLeaderboardsBinding binding;
     DatabaseReference mDatabase;
     LeaderboardAdapter adapter;
     List<String> userList;
@@ -30,13 +33,17 @@ public class Leaderboards extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaderboards);
+        binding = ActivityLeaderboardsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         userList = new ArrayList<>();
         adapter = new LeaderboardAdapter(userList);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
         ActionBar actionBar = getSupportActionBar();
@@ -73,5 +80,22 @@ public class Leaderboards extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }

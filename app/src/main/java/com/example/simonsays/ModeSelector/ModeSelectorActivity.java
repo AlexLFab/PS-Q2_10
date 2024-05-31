@@ -10,40 +10,43 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.Piano.PianoActivity;
 import com.example.simonsays.R;
 import com.example.simonsays.Simon.SimonActivity;
 import com.example.simonsays.Simon.SimonMultiplayer;
 import com.example.simonsays.StartActivity;
+import com.example.simonsays.databinding.ModeSelectorBinding;
 
 public class ModeSelectorActivity extends AppCompatActivity {
+
+    ModeSelectorBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mode_selector);
+        binding = ModeSelectorBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        Button singlePlayerButton = findViewById(R.id.singlePlayerButton);
-        Button multiPlayerButton = findViewById(R.id.multiPlayerButton);
-        Button reflexTestButton = findViewById(R.id.reflexTest);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        singlePlayerButton.setOnClickListener(new View.OnClickListener() {
+        binding.singlePlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 singlePlayer();
             }
         });
 
-        multiPlayerButton.setOnClickListener(new View.OnClickListener() {
+        binding.multiPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 multiPlayer();
             }
         });
 
-        reflexTestButton.setOnClickListener(new View.OnClickListener() {
+        binding.reflexTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 reflexTest();
@@ -74,5 +77,22 @@ public class ModeSelectorActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }

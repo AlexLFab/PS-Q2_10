@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -11,7 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.databaseItems.User;
+import com.example.simonsays.databinding.ActivityRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,36 +30,34 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
+    ActivityRegisterBinding binding;
 
-    private TextInputEditText editTextUsername, editTextEmail, editTextPassword;
-    private Button buttonReg;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         // Inicializar Firebase
         FirebaseApp.initializeApp(this);
 
-        editTextUsername = findViewById(R.id.usernameReg);
-        editTextPassword = findViewById(R.id.passwordReg);
-        editTextEmail = findViewById(R.id.emailReg);
-        buttonReg = findViewById(R.id.buttonReg);
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/users");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        binding.buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username, password, email;
-                username = editTextUsername.getText().toString().trim();
-                email = editTextEmail.getText().toString().trim();
-                password = editTextPassword.getText().toString().trim();
+                username = binding.usernameReg.getText().toString().trim();
+                email = binding.emailReg.getText().toString().trim();
+                password = binding.passwordReg.getText().toString().trim();
 
                 if (username.isEmpty()) {
                     Toast.makeText(Register.this, "Enter username", Toast.LENGTH_SHORT).show();
@@ -149,4 +150,21 @@ public class Register extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
+    }
+
 }

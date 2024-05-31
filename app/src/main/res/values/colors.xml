@@ -3,12 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="normal_green">#00FF00</color>
-    <color name="normal_red">#FF0000</color>
+    <color name="normal_red">#8E0000</color>
     <color name="normal_blue">#0000FF</color>
     <color name="normal_yellow">#E0A800</color>
-    <color name="highlight_green">#66FF66</color>
-    <color name="highlight_red">#FF6666</color>
-    <color name="highlight_blue">#6666FF</color>
+    <color name="highlight_green">#B9F612</color>
+    <color name="highlight_red">#FF0000</color>
+    <color name="highlight_blue">#66CFFF</color>
     <color name="highlight_yellow">#FFFF66</color>
     <!-- Puedes ajustar los códigos de color según tus preferencias -->
 

@@ -14,10 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.simonsays.Music.AudioService;
 import com.example.simonsays.Piano.PianoActivity;
 import com.example.simonsays.R;
 import com.example.simonsays.Simon.SimonActivity;
 import com.example.simonsays.Simon.SimonMultiplayer;
+import com.example.simonsays.databinding.MultiplayerSelectorBinding;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,30 +32,32 @@ import java.util.Map;
 import java.util.Random;
 
 public class MultiplayerSelector extends AppCompatActivity {
+    MultiplayerSelectorBinding binding;
     private static final int REQUEST_CODE = 111;
     private DatabaseReference mDatabaseSalas;
-    TextView noSalaTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.multiplayer_selector);
+        binding = MultiplayerSelectorBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        Button crearSalaButton = findViewById(R.id.crearSala);
-        Button unirseButton = findViewById(R.id.unirse);
-        noSalaTv = findViewById(R.id.noSala);
-        noSalaTv.setVisibility(View.INVISIBLE);
+
+
+        binding.noSala.setVisibility(View.INVISIBLE);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         mDatabaseSalas = FirebaseDatabase.getInstance().getReferenceFromUrl("https://ps-q2-10-default-rtdb.europe-west1.firebasedatabase.app/Salas");
 
-        crearSalaButton.setOnClickListener(new View.OnClickListener() {
+        binding.crearSala.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 crearSala();
             }
         });
 
-        unirseButton.setOnClickListener(new View.OnClickListener() {
+        binding.unirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 unirseSala();
@@ -62,7 +66,7 @@ public class MultiplayerSelector extends AppCompatActivity {
     }
 
     private void crearSala() {
-        noSalaTv.setVisibility(View.INVISIBLE);
+        binding.noSala.setVisibility(View.INVISIBLE);
         mDatabaseSalas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,7 +108,7 @@ public class MultiplayerSelector extends AppCompatActivity {
     }
 
     private void unirseSala() {
-        noSalaTv.setVisibility(View.VISIBLE);
+        binding.noSala.setVisibility(View.VISIBLE);
         mDatabaseSalas.addListenerForSingleValueEvent(new ValueEventListener() {
             int aux=0;
             @Override
@@ -123,7 +127,7 @@ public class MultiplayerSelector extends AppCompatActivity {
                                 intent.putExtra("userNumber", 2);
                                 intent.putExtra("salaNumber", Integer.valueOf(String.valueOf(lastChar)));
                                 startActivityForResult(intent,REQUEST_CODE);
-                                noSalaTv.setVisibility(View.INVISIBLE);
+                                binding.noSala.setVisibility(View.INVISIBLE);
                             }
                         } else {
                             // Maneja el caso en el que el último carácter no sea un dígito
@@ -178,5 +182,22 @@ public class MultiplayerSelector extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.PAUSE);
+        startService(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i = new Intent(this, AudioService.class);
+        i.putExtra("action", AudioService.START);
+        startService(i);
     }
 }

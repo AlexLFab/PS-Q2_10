@@ -7,6 +7,10 @@ android {
     namespace = "com.example.simonsays"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "udc.psi.simonsays"
         minSdk = 29
