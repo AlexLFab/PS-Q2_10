@@ -39,4 +39,27 @@
     <string name="select_your_preferred_language">Selecciona tu lenguaje. CUIDADO: La app se reiniciará</string>
     <string name="language">Lenguaje</string>
     <string name="record">Record</string>
+    <string name="guest">Guest</string>
+    <string name="database_error_please_try_again">Error en la Base de Datos. Intentelo de nuevo.</string>
+    <string name="authentication_failed">Fallo de Autenticación.</string>
+    <string name="enter_password">Introduzca contraseña</string>
+    <string name="enter_email">Introduzca Email</string>
+    <string name="enter_username">Introduzca Usuario</string>
+    <string name="leaderboard_update">¡Cambios en la Clasificación!</string>
+    <string name="someone_has_overtaken_you_in_the_leaderboard">¡Alguien te a adelantado en la clasificación!</string>
+    <string name="open_app">Abrir App</string>
+    <string name="dismiss">Cerrar</string>
+    <string name="failed_to_load_data">No se ha podido encontrar los datos</string>
+    <string name="your_turn">¡Tu Turno!</string>
+    <string name="pay_attention">¡Presta Atención!</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="_1">1</string>
+    <string name="error_try_again">Error! Intentalo de nuevo.</string>
+    <string name="buena_eleccion">Buena Eleccion!</string>
+    <string name="debes_iniciar_sesi_n_para_jugar_el_modo_multijugador">Debes iniciar sesión para jugar el modo multijugador</string>
+    <string name="select_next_color_for_your_oponent">¡Selecciona el siguiente color para tu rival!</string>
+    <string name="est_s_seguro_de_que_deseas_salir">¿Estás seguro de que deseas salir?</string>
+    <string name="s">Sí</string>
+    <string name="no">No</string>
 </resources>

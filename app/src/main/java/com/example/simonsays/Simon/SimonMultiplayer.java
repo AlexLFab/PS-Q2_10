@@ -132,7 +132,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
-                            Toast.makeText(SimonMultiplayer.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SimonMultiplayer.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
                             tv_beat.setText(getString(R.string.best, highscore));
                         }
                     });
@@ -222,7 +222,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                                 tv_waiting.setVisibility(View.INVISIBLE);
                             }else{
                                 if (turnSala!=0)
-                                    countdownTextView.setText("Buena Eleccion!");
+                                    countdownTextView.setText(R.string.buena_eleccion);
                                 disableButtons();
                                 tv_waiting.setVisibility(View.VISIBLE);
                             }
@@ -234,7 +234,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                                 if (turnSala < 2)
                                     countdownTextView.setText("");
                                 else
-                                    countdownTextView.setText("Buena Eleccion!");
+                                    countdownTextView.setText(R.string.buena_eleccion);
                                 disableButtons();
                                 tv_waiting.setVisibility(View.VISIBLE);
                             }
@@ -250,7 +250,7 @@ public class SimonMultiplayer extends AppCompatActivity {
 
 
         }else{
-            Toast.makeText(SimonMultiplayer.this, "Debes iniciar sesión para jugar el modo multijugador", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SimonMultiplayer.this, R.string.debes_iniciar_sesi_n_para_jugar_el_modo_multijugador, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -288,17 +288,17 @@ public class SimonMultiplayer extends AppCompatActivity {
     }
 
     private void startCountdown() {
-        countdownTextView.setText("3");
+        countdownTextView.setText(R.string._3);
         handler.postDelayed(() -> {
-            countdownTextView.setText("2");
+            countdownTextView.setText(R.string._2);
             handler.postDelayed(() -> {
-                countdownTextView.setText("1");
+                countdownTextView.setText(R.string._1);
                 handler.postDelayed(() -> {
                     if (player_turn) {
-                        countdownTextView.setText("Your Turn!");
+                        countdownTextView.setText(R.string.your_turn);
                         enableButtons();
                     } else {
-                        countdownTextView.setText("Pay Attention!");
+                        countdownTextView.setText(R.string.pay_attention);
                         showSequence();
                     }
                 }, 1000);
@@ -376,7 +376,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                     playerInput.clear();
                     score++;
                     tv_score.setText(getString(R.string.score_label, score));
-                    countdownTextView.setText("Select Next Color for your oponent!");
+                    countdownTextView.setText(R.string.select_next_color_for_your_oponent);
                     //generateSequence();
                     player_turn = false;
 
@@ -433,7 +433,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
-                            Toast.makeText(SimonMultiplayer.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SimonMultiplayer.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
                             tv_beat.setText(getString(R.string.best, highscore));
                         }
                     });
@@ -489,9 +489,9 @@ public class SimonMultiplayer extends AppCompatActivity {
     public void onBackPressed() {
         // Muestra un cuadro de diálogo de confirmación antes de cerrar la actividad
         new AlertDialog.Builder(this)
-                .setMessage("¿Estás seguro de que deseas salir?")
+                .setMessage(R.string.est_s_seguro_de_que_deseas_salir)
                 .setCancelable(false)
-                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.s, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("result_key", 0); // Añadir el dato al Intent
@@ -500,7 +500,7 @@ public class SimonMultiplayer extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 

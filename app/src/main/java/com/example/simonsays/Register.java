@@ -60,15 +60,15 @@ public class Register extends AppCompatActivity {
                 password = binding.passwordReg.getText().toString().trim();
 
                 if (username.isEmpty()) {
-                    Toast.makeText(Register.this, "Enter username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, R.string.enter_username, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (email.isEmpty()) {
-                    Toast.makeText(Register.this, "Enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, R.string.enter_email, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (password.isEmpty()) {
-                    Toast.makeText(Register.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, R.string.enter_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -96,7 +96,7 @@ public class Register extends AppCompatActivity {
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 // Error en la consulta
                                 Log.w(TAG, "Database error: " + databaseError.getMessage());
-                                Toast.makeText(Register.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Register.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -135,7 +135,7 @@ public class Register extends AppCompatActivity {
                         } else {
                             // Si el registro falla, mostrar un mensaje al usuario.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, R.string.authentication_failed, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

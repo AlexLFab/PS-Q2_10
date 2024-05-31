@@ -140,12 +140,12 @@ public class LeaderboardWorker extends Worker {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.img_logo)
-                .setContentTitle("Leaderboard Update")
-                .setContentText("Someone has overtaken you in the leaderboard!")
+                .setContentTitle(context.getString(R.string.leaderboard_update))
+                .setContentText(context.getString(R.string.someone_has_overtaken_you_in_the_leaderboard))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent) // Acción para abrir la aplicación
-                .addAction(R.drawable.ic_empty, "Open App", pendingIntent) // Botón para abrir la aplicación
-                .addAction(R.drawable.ic_empty, "Dismiss", dismissPendingIntent) // Botón para eliminar la notificación
+                .addAction(R.drawable.ic_empty, context.getString(R.string.open_app), pendingIntent) // Botón para abrir la aplicación
+                .addAction(R.drawable.ic_empty, context.getString(R.string.dismiss), dismissPendingIntent) // Botón para eliminar la notificación
                 .setAutoCancel(true); // Descartar notificación al hacer clic
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -100,12 +100,12 @@ public class StartActivity extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
-                            Toast.makeText(StartActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
-                            binding.usernameDisplay.setText("Guest");
+                            Toast.makeText(StartActivity.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
+                            binding.usernameDisplay.setText(R.string.guest);
                         }
                     });
         }else{
-            binding.usernameDisplay.setText("Guest");
+            binding.usernameDisplay.setText(R.string.guest);
         }
 
         binding.startButton.setOnClickListener(this::startGame);
@@ -171,11 +171,11 @@ public class StartActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
                             Toast.makeText(StartActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
-                            binding.usernameDisplay.setText("Guest");
+                            binding.usernameDisplay.setText(R.string.guest);
                         }
                     });
         }else{
-            binding.usernameDisplay.setText("Guest");
+            binding.usernameDisplay.setText(R.string.guest);
         }
         Intent i = new Intent(this, AudioService.class);
         i.putExtra("action", AudioService.START);

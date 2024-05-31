@@ -55,11 +55,11 @@ public class Login extends AppCompatActivity {
                 password = String.valueOf(binding.passwordLog.getText());
 
                 if (username.isEmpty()) {
-                    Toast.makeText(Login.this, "Enter username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, R.string.enter_username, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (password.isEmpty()) {
-                    Toast.makeText(Login.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, R.string.enter_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

@@ -105,7 +105,7 @@ public class SimonActivity extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
-                            Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SimonActivity.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
                             tv_beat.setText(getString(R.string.best) + highscore);
                         }
                     });
@@ -134,17 +134,17 @@ public class SimonActivity extends AppCompatActivity {
     }
 
     private void startCountdown() {
-        countdownTextView.setText("3");
+        countdownTextView.setText(R.string._3);
         handler.postDelayed(() -> {
-            countdownTextView.setText("2");
+            countdownTextView.setText(R.string._2);
             handler.postDelayed(() -> {
-                countdownTextView.setText("1");
+                countdownTextView.setText(R.string._1);
                 handler.postDelayed(() -> {
                     if (player_turn) {
-                        countdownTextView.setText("Your Turn!");
+                        countdownTextView.setText(R.string.your_turn);
                         enableButtons();
                     } else {
-                        countdownTextView.setText("Pay Attention!");
+                        countdownTextView.setText(R.string.pay_attention);
                         showSequence();
                     }
                 }, 1000);
@@ -255,7 +255,7 @@ public class SimonActivity extends AppCompatActivity {
                 updateHighscore(score);
             }
         } else {
-            Toast.makeText(this, "Error! Try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_try_again, Toast.LENGTH_SHORT).show();
             currentIndex = 0;
             playerInput.clear();
             score = 0;
@@ -307,7 +307,7 @@ public class SimonActivity extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Error en la consulta
-                            Toast.makeText(SimonActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SimonActivity.this, R.string.database_error_please_try_again, Toast.LENGTH_SHORT).show();
                             tv_beat.setText(getString(R.string.best) + highscore);
                         }
                     });

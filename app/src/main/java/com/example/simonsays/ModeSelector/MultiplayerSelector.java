@@ -153,10 +153,10 @@ public class MultiplayerSelector extends AppCompatActivity {
                 int result = data.getIntExtra("result_key", 0);
                 String salaName = data.getStringExtra("result_sala");
                 if (result==1){
-                    Toast.makeText(MultiplayerSelector.this, "YOU WIN!! Congratilations", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MultiplayerSelector.this, R.string.you_win_congratilations, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(this, "YOU LOOSE!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.you_loose, Toast.LENGTH_SHORT).show();
                 }
                 mDatabaseSalas.child(salaName).removeValue(new DatabaseReference.CompletionListener() {
                     @Override

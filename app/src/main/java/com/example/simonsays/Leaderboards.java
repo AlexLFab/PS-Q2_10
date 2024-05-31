@@ -67,7 +67,7 @@ public class Leaderboards extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Leaderboards.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Leaderboards.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
             }
         });
     }
