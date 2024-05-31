@@ -126,7 +126,7 @@ public class LeaderboardWorker extends Worker {
 
     private void sendNotification() {
         Context context = getApplicationContext();
-        int notificationId = 1; // ID de la notificación
+        int notificationId = 1;
 
         // Intent para abrir la aplicación
         Intent intent = new Intent(context, StartActivity.class);
@@ -139,7 +139,7 @@ public class LeaderboardWorker extends Worker {
         PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(context, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.img_logo) // Asegúrate de tener un icono válido
+                .setSmallIcon(R.drawable.img_logo)
                 .setContentTitle("Leaderboard Update")
                 .setContentText("Someone has overtaken you in the leaderboard!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
